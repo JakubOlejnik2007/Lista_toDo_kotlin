@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lista TODO w Kotlin</string>
+    <string name="editTextHint">Wpisz rzecz do zrobienia</string>
+    <string name="addButtonText">Dodaj do listy</string>
+    <string name="resetButtonText">Resetuj</string>
+    <string name="listHeaderText">Lista rzeczy do zrobienia</string>
+</resources>
