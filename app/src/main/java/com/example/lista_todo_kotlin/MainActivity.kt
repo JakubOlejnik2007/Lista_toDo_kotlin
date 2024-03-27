@@ -1,5 +1,6 @@
 package com.example.lista_todo_kotlin
 
+import SharedPreferencesManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,16 +20,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var poleEdycyjne: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TodoAdapter
+    private lateinit var manager: SharedPreferencesManager
     private var lista = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        manager = SharedPreferencesManager(this)
+
         buttonAdd = findViewById(R.id.buttonAdd)
         buttonReset = findViewById(R.id.buttonReset)
         recyclerView = findViewById(R.id.recyclerView)
         poleEdycyjne = findViewById(R.id.editText)
+        lista = manager.getList("lista")
 
         adapter = TodoAdapter(lista)
         recyclerView.adapter = adapter
@@ -36,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         buttonAdd.setOnClickListener { handleAddElementButtonOnClick(it) }
         buttonReset.setOnClickListener { handleResetButtonOnClick(it) }
+
+
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0,
@@ -53,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 lista.removeAt(position)
                 adapter.notifyDataSetChanged()
+                manager.saveList("lista", lista)
             }
         })
 
@@ -64,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         if (poleEdycyjneValue.isEmpty()) return
         else {
             lista.add(poleEdycyjneValue)
+            manager.saveList("lista", lista)
             adapter.notifyDataSetChanged()
             clearEditText()
         }
@@ -71,6 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleResetButtonOnClick(view: View) {
         lista.clear()
+        manager.saveList("lista", lista)
         adapter.notifyDataSetChanged()
     }
 
